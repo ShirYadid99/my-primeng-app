@@ -1,0 +1,55 @@
+<p-table [value]="data" [(selection)]="selectedItems" dataKey="id">
+  <ng-template pTemplate="header">
+    <tr>
+      <th *ngFor="let col of columns">
+        <ng-container [ngSwitch]="col.type">
+          <!-- Checkbox header -->
+          <p-checkbox *ngSwitchCase="'checkbox'"
+                      [binary]="true"
+                      [ngModel]="isAllSelected()"
+                      (onChange)="toggleAllSelection()">
+          </p-checkbox>
+
+          <!-- Default header -->
+          <span *ngSwitchDefault>{{ col.header }}</span>
+        </ng-container>
+      </th>
+    </tr>
+  </ng-template>
+
+  <ng-template pTemplate="body" let-item>
+    <tr>
+      <td *ngFor="let col of columns">
+        <ng-container [ngSwitch]="col.type">
+          
+          <!-- Checkbox cell -->
+          <p-checkbox *ngSwitchCase="'checkbox'"
+                [(ngModel)]="selectedItems"
+                [binary]="false"
+                [value]="item">
+          </p-checkbox>
+
+          <!-- Date cell -->
+          <span *ngSwitchCase="'date'">
+            {{ item[col.field] | date:'dd/MM/yyyy' }}
+          </span>
+
+          <!-- Button cell -->
+          <button *ngSwitchCase="'button'"
+                  pButton
+                  type="button"
+                  [label]="col.header"
+                  [class]="col.buttonClass"
+                  (click)="onButtonClick(col.buttonAction, item)">
+          </button>
+
+          <!-- Default cell -->
+          <span *ngSwitchDefault>
+            {{ item[col.field] }}
+          </span>
+
+        </ng-container>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

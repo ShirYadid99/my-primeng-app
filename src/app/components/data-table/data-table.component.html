@@ -1,55 +1,178 @@
-<p-table [value]="data" [(selection)]="selectedItems" dataKey="id">
-  <ng-template pTemplate="header">
-    <tr>
-      <th *ngFor="let col of columns">
-        <ng-container [ngSwitch]="col.type">
-          <!-- Checkbox header -->
-          <p-checkbox *ngSwitchCase="'checkbox'"
-                      [binary]="true"
-                      [ngModel]="isAllSelected()"
-                      (onChange)="toggleAllSelection()">
-          </p-checkbox>
+<div dir="rtl" class="data-table-container ">
+  <p-table class="centered-table"
+           [value]="data"
+           dir=" rtl"
+           [(selection)]="selectedItems"
+           dataKey="id"
+           [rowHover]="true"
+           showGridlines="true"
+  
 
-          <!-- Default header -->
-          <span *ngSwitchDefault>{{ col.header }}</span>
-        </ng-container>
-      </th>
-    </tr>
-  </ng-template>
+           [tableStyle]="{ 'table-layout': 'fixed', 'width': '100%' }"
+           sortMode="multiple">
 
-  <ng-template pTemplate="body" let-item>
-    <tr>
-      <td *ngFor="let col of columns">
-        <ng-container [ngSwitch]="col.type">
-          
-          <!-- Checkbox cell -->
-          <p-checkbox *ngSwitchCase="'checkbox'"
-                [(ngModel)]="selectedItems"
-                [binary]="false"
-                [value]="item">
-          </p-checkbox>
+    <!-- Header -->
+    <ng-template pTemplate="header">
+      <tr>
+        <th  [ngStyle]=" {'width': '60px' }"></th>
+        <th *ngFor="let col of columns"
+            [pSortableColumn]="col.sortable ? col.field : undefined"
+            [ngStyle]="{'text-align': 'center','fontWeight': 'bold', 'fontStyle': 'italic','width': col.type === 'checkbox' ? '50px' : ''}">
 
-          <!-- Date cell -->
-          <span *ngSwitchCase="'date'">
-            {{ item[col.field] | date:'dd/MM/yyyy' }}
-          </span>
+          <ng-container [ngSwitch]="col.type">
 
-          <!-- Button cell -->
-          <button *ngSwitchCase="'button'"
-                  pButton
-                  type="button"
-                  [label]="col.header"
-                  [class]="col.buttonClass"
-                  (click)="onButtonClick(col.buttonAction, item)">
+              
+            <!-- Checkbox header -->
+            <p-checkbox *ngSwitchCase="'checkbox'"
+                        [binary]="true"
+                        [ngModel]="isAllSelected()"
+                        (onChange)="toggleAllSelection()"
+                        [ngStyle]="{'width': '30px', 'height': '30px'}"
+                        >
+            </p-checkbox>
+
+
+
+            <!-- String or date headers with sorting -->
+            <span *ngSwitchCase="'string'">
+              {{ col.header }}
+              <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
+            </span>
+
+            <span *ngSwitchCase="'date'">
+              {{ col.header }}
+              <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
+            </span>
+
+            <span *ngSwitchCase="'number'">
+              {{ col.header }}
+              <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
+            </span>
+
+
+            <!-- Non-sortable buttons -->
+            <span *ngSwitchCase="'button'">
+              {{ col.header }}
+            </span>
+
+            <!-- Default fallback -->
+            <span *ngSwitchDefault>
+              {{ col.header }}
+            </span>
+
+          </ng-container>
+        </th>
+      </tr>
+    </ng-template>
+
+    <!-- Body -->
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <!-- Expand button -->
+        <td [ngStyle]=" {'width': '60px', 'height': '50px' }">
+          <button type="button" pButton
+                  [icon]="expandedRows[item.id] ? 'pi pi-chevron-down' : 'pi pi-chevron-left'"
+                  (click)="onRowToggle(item)"
+                  pRipple [text]="true"
+                  
+                  >
           </button>
+        </td>
 
-          <!-- Default cell -->
-          <span *ngSwitchDefault>
-            {{ item[col.field] }}
-          </span>
+        <!-- Dynamic body cells -->
+        <td *ngFor="let col of columns" [ngStyle]="{'text-align': 'center'}">
+          <ng-container [ngSwitch]="col.type">
 
-        </ng-container>
-      </td>
-    </tr>
-  </ng-template>
-</p-table>
+            <!-- Checkbox -->
+            <p-checkbox *ngSwitchCase="'checkbox'"
+                        [(ngModel)]="selectedItems"
+                        [binary]="false"
+                        [value]="item">
+            </p-checkbox>
+
+            <!-- Date -->
+            <span *ngSwitchCase="'date'"
+                  [pTooltip]="item[col.field]" tooltipPosition="top">
+              {{ item[col.field] | date:'dd/MM/yyyy' }}
+            </span>
+
+            <!-- Button -->
+            <button *ngSwitchCase="'button'"
+                    pButton type="button"
+                    [label]="col.buttonLabel || col.header"
+                    [class]="col.buttonClass"
+                    (click)="onButtonClick(col.buttonAction, item)">
+            </button>
+
+            <!-- Default text -->
+            <span *ngSwitchDefault [pTooltip]="item[col.field]" tooltipPosition="top">
+              {{ item[col.field] }}
+            </span>
+
+          </ng-container>
+        </td>
+      </tr>
+
+      <!-- Expanded Row -->
+      <tr *ngIf="expandedRows[item.id]">
+        <td [attr.colspan]="columns.length + 1">
+          <div style="text-align: right;"> מידע עבור מס רשומה : {{item.id}}</div>
+          <div class="p-4 bg-gray-50">
+            <p-table [value]="expandedData[item.id]"
+                     dir="rtl"
+                     >
+              <!-- Nested Header -->
+              <ng-template pTemplate="header">
+                <tr>
+                  <th *ngFor="let col of expandedColumns"
+                      [pSortableColumn]="col.sortable ? col.field : undefined"
+                      [ngStyle]="{'fontWeight': 'bold', 'fontStyle': 'italic'}">
+                    {{ col.header }}
+                    <p-sortIcon *ngIf="col.sortable" [field]="col.field"></p-sortIcon>
+                  </th>
+                </tr>
+              </ng-template>
+
+              <!-- Nested Body -->
+              <ng-template pTemplate="body" let-row>
+                <tr>
+                  <td *ngFor="let col of expandedColumns">
+                    <ng-container [ngSwitch]="col.type">
+
+                      <p-checkbox *ngSwitchCase="'checkbox'"
+                                  [(ngModel)]="selectedItems"
+                                  [binary]="false"
+                                  [value]="row">
+                      </p-checkbox>
+
+                      <span *ngSwitchCase="'date'"
+                            [pTooltip]="row[col.field]"
+                            tooltipPosition="top">
+                        {{ row[col.field] | date:'dd/MM/yyyy' }}
+                      </span>
+
+                      <button *ngSwitchCase="'button'"
+                              pButton type="button"
+                              [label]="col.header"
+                              [class]="col.buttonClass"
+                              (click)="onButtonClick(col.buttonAction, row)">
+                      </button>
+
+                      <span *ngSwitchDefault
+                            [pTooltip]="row[col.field]"
+                            tooltipPosition="top">
+                        {{ row[col.field] }}
+                      </span>
+
+                    </ng-container>
+                  </td>
+                </tr>
+              </ng-template>
+
+            </p-table>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

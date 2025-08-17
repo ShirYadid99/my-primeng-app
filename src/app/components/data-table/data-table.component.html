@@ -1,13 +1,15 @@
 <div dir="rtl" class="data-table-container ">
   <p-table class="centered-table"
+           stripedRows 
            [value]="data"
            dir=" rtl"
            [(selection)]="selectedItems"
            dataKey="id"
            [rowHover]="true"
            showGridlines="true"
-  
-
+           [scrollable]="true"
+           [scrollHeight]="'700px'"
+           [tableStyleClass]="'p-datatable-striped'"
            [tableStyle]="{ 'table-layout': 'fixed', 'width': '100%' }"
            sortMode="multiple">
 

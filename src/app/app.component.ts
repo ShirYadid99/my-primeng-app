@@ -52,8 +52,35 @@ export class AppComponent {
     { id: 23, name: 'קובץ 23', created: new Date(2024, 5, 12) },
     { id: 24, name: 'קובץ 24', created: new Date(2024, 6, 5) },
     { id: 25, name: 'קובץ 25', created: new Date(2024, 7, 20) },
-    // add more if you want to test multiple pages
-  ];
+    // Added 20 more
+    { id: 26, name: 'קובץ 26', created: new Date(2024, 5, 15) },
+    { id: 27, name: 'קובץ 27', created: new Date(2024, 6, 18) },
+    { id: 28, name: 'קובץ 28', created: new Date(2024, 7, 22) },
+    { id: 29, name: 'קובץ 29', created: new Date(2024, 5, 25) },
+    { id: 30, name: 'קובץ 30', created: new Date(2024, 6, 28) },
+    { id: 31, name: 'קובץ 31', created: new Date(2024, 7, 30) },
+    { id: 32, name: 'קובץ 32', created: new Date(2024, 5, 5) },
+    { id: 33, name: 'קובץ 33', created: new Date(2024, 6, 10) },
+    { id: 34, name: 'קובץ 34', created: new Date(2024, 7, 12) },
+    { id: 35, name: 'קובץ 35', created: new Date(2024, 5, 20) },
+    { id: 36, name: 'קובץ 36', created: new Date(2024, 6, 23) },
+    { id: 37, name: 'קובץ 37', created: new Date(2024, 7, 26) },
+    { id: 38, name: 'קובץ 38', created: new Date(2024, 5, 30) },
+    { id: 39, name: 'קובץ 39', created: new Date(2024, 6, 2) },
+    { id: 40, name: 'קובץ 40', created: new Date(2024, 7, 8) },
+    { id: 41, name: 'קובץ 41', created: new Date(2024, 5, 12) },
+    { id: 42, name: 'קובץ 42', created: new Date(2024, 6, 15) },
+    { id: 43, name: 'קובץ 43', created: new Date(2024, 7, 18) },
+    { id: 44, name: 'קובץ 44', created: new Date(2024, 5, 21) },
+    { id: 45, name: 'קובץ 45', created: new Date(2024, 6, 24) },
+    { id: 46, name: 'קובץ 46', created: new Date(2024, 7, 27) },
+    { id: 47, name: 'קובץ 47', created: new Date(2024, 5, 3) },
+    { id: 48, name: 'קובץ 48', created: new Date(2024, 6, 6) },
+    { id: 49, name: 'קובץ 49', created: new Date(2024, 7, 9) },
+    { id: 50, name: 'קובץ 50', created: new Date(2024, 5, 11) },
+    { id: 51, name: 'קובץ 50', created: new Date(2024, 5, 11) },
+];
+
 
   data: any[] = [];
   pageSize: number = 20; // Number of items per page
@@ -93,6 +120,7 @@ loadPage(pageNumber: number) {
 
   setTimeout(() => {
     this.dataTable.appendData(newData); // safe: appendData handles loadingMore
+    
   }, 1000);
 }
 

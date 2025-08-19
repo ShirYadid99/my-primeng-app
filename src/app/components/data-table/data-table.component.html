@@ -1,4 +1,5 @@
-<div dir="rtl" class="data-table-container" >
+<div #scrollableContainer  dir="rtl" class="data-table-container" >
+  
   <p-table class="centered-table"
           #table
            stripedRows
@@ -118,11 +119,7 @@
         </td>
       </tr>
       
-      <tr *ngIf="loadingMore">
-        <td *ngFor="let col of columns">
-          <p-skeleton width="100%" height="2rem"></p-skeleton>
-        </td>
-      </tr>
+
 
       <!-- Expanded Row -->
       <tr *ngIf="expandedRows[item.id]">
@@ -194,7 +191,5 @@
     </ng-template>
   </p-table>
 
-    <div *ngIf="loadingMore" style="padding:1rem">
-    <p-skeleton *ngFor="let i of [1,2,3,4,5]" width="100%" height="2rem" styleClass="mb-2"></p-skeleton>
-  </div>
+
 </div>

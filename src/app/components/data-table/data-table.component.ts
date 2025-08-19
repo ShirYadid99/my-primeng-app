@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Table, TableModule } from 'primeng/table';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
@@ -27,6 +27,11 @@ export class DataTableComponent {
   @Output() action = new EventEmitter<{ type: string | undefined, row: any }>();
   @Output() loadNext = new EventEmitter< number>();
 
+  constructor(private cd: ChangeDetectorRef) {}
+
+
+
+
   selectedItems: any[] = [];
   expandedRows: any = {};
   expandedLoading: { [key: number]: boolean } = {};
@@ -34,25 +39,35 @@ export class DataTableComponent {
   loadingMore: boolean = false;
   currentPage: number = 0;
   allLoaded: boolean = false;
+  lastFirst = 0; // keeps track of the previous scroll position
+  loadedRows = 0;
+  pageSize = 20;
 
-appendData(newData: any[]) {
-  if (!newData || newData.length === 0) {
-    this.allLoaded = true; // no more data
-    return;
+  appendData(newData: any[]) {
+    if (!newData || newData.length === 0) {
+      this.allLoaded = true;
+      this.loadingMore = false;
+      this.cd.detectChanges(); // Check for updates even on empty data
+      return;
+    }
+
+    this.loadingMore = true;
+
+    if (this.data.length === 0) {
+      this.data = newData;
+    } else {
+      newData.forEach(item => this.data.push(item));
+    }
+
+    this.loadedRows = this.data.length;
+
+    if (newData.length < this.pageSize) {
+      this.allLoaded = true;
+    }
+
+    this.loadingMore = false;
+    this.cd.detectChanges(); // This is the key line. Force a UI update here.
   }
-
-  this.loadingMore = true; // show skeleton immediately
-  this.data = [...this.data, ...newData];
-  this.loadedRows = this.data.length; // update loadedRows
-
-  if (newData.length < this.pageSize) {
-    this.allLoaded = true; // last page
-  }
-  this.loadingMore = false; // hide skeleton after rows are appended
-
-  console.log('Updated data - child:', this.data);
-  this.loadingMore = false;
-}
 
   setExpandedData(rowId: number, newData: any[]) {
     this.expandedData[rowId] = newData;
@@ -81,38 +96,22 @@ appendData(newData: any[]) {
       delete this.expandedLoading[id];
     }
   }
-  ////////////////////////////
-  lastFirst = 0; // keeps track of the previous scroll position
-loadedRows = 0;
-pageSize = 20;
 
 
 
-onScroll(event: any) {
-  const bufferEnd = event.first + event.rows;
 
-  // Only load if scrolling down and we haven’t loaded all data
-  if (!this.allLoaded && event.first > this.lastFirst && this.loadedRows <1000) {
-    const nextPage = Math.floor(this.loadedRows / this.pageSize);
-    this.loadNext.emit(nextPage);
+  onScroll(event: any) {
+    const bufferEnd = event.first + event.rows;
+
+    // Only load if scrolling down and we haven’t loaded all data
+    if (!this.loadingMore&&!this.allLoaded && event.first > this.lastFirst && this.loadedRows <100000) {
+      const nextPage = Math.floor(this.loadedRows / this.pageSize);
+      this.loadingMore = true;
+      this.loadNext.emit(nextPage);
+    }
+
+    this.lastFirst = event.first;
   }
-
-  this.lastFirst = event.first;
-}
-
-
-
-
-
-// onScroll(event: any) {
-//   console.log('Scroll event:', event);
-
-//   if (this.loadingMore || this.allLoaded) return;
-//   this.loadingMore = true;
-//   // emit the page to parent
-//   console.log('emit to parenevt');
-//   this.loadNext.emit(this.currentPage );
-// }
 
 
 

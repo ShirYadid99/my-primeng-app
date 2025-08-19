@@ -1,8 +1,9 @@
-<div dir="rtl" class="data-table-container ">
+<div dir="rtl" class="data-table-container" >
   <p-table class="centered-table"
-           stripedRows 
+          #table
+           stripedRows
            [value]="data"
-           dir=" rtl"
+           dir="rtl"
            [(selection)]="selectedItems"
            dataKey="id"
            [rowHover]="true"
@@ -11,7 +12,10 @@
            [scrollHeight]="'700px'"
            [tableStyleClass]="'p-datatable-striped'"
            [tableStyle]="{ 'table-layout': 'fixed', 'width': '100%' }"
-           sortMode="multiple">
+           sortMode="multiple"
+
+           [virtualScroll]="true" [virtualScrollItemSize]="60" [lazy]="true" (onLazyLoad)="onScroll($event)" [totalRecords]="10000">
+           
 
     <!-- Header -->
     <ng-template pTemplate="header">
@@ -52,7 +56,6 @@
             </span>
 
 
-            <!-- Non-sortable buttons -->
             <span *ngSwitchCase="'button'">
               {{ col.header }}
             </span>
@@ -68,7 +71,7 @@
     </ng-template>
 
     <!-- Body -->
-    <ng-template pTemplate="body" let-item>
+    <ng-template pTemplate="body" let-item> 
       <tr>
         <!-- Expand button -->
         <td [ngStyle]=" {'width': '60px', 'height': '50px' }">
@@ -114,13 +117,26 @@
           </ng-container>
         </td>
       </tr>
+      
+      <tr *ngIf="loadingMore">
+        <td *ngFor="let col of columns">
+          <p-skeleton width="100%" height="2rem"></p-skeleton>
+        </td>
+      </tr>
 
       <!-- Expanded Row -->
       <tr *ngIf="expandedRows[item.id]">
         <td [attr.colspan]="columns.length + 1">
-          <div style="text-align: right;"> מידע עבור מס רשומה : {{item.id}}</div>
+          <div style="text-align: right"> מידע עבור מס רשומה : {{item.id}}</div>
           <div class="p-4 bg-gray-50">
-            <p-table [value]="expandedData[item.id]"
+
+            <div *ngIf="expandedLoading[item.id]">
+              <p-skeleton width="100%" height= "2rem" styleClass="mb-2"></p-skeleton>
+              
+              <p-skeleton width="100%" height="2rem" styleClass="mb-2"></p-skeleton>
+              <p-skeleton width="100%" height="2rem"></p-skeleton>
+            </div>
+            <p-table *ngIf="!expandedLoading[item.id]"  [value]="expandedData[item.id]"
                      dir="rtl"
                      >
               <!-- Nested Header -->
@@ -177,4 +193,8 @@
       </tr>
     </ng-template>
   </p-table>
+
+    <div *ngIf="loadingMore" style="padding:1rem">
+    <p-skeleton *ngFor="let i of [1,2,3,4,5]" width="100%" height="2rem" styleClass="mb-2"></p-skeleton>
+  </div>
 </div>

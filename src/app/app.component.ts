@@ -12,27 +12,21 @@ import { TableColumn } from './models/table-col';
 export class AppComponent {
   @ViewChild(DataTableComponent) dataTable!: DataTableComponent;
 
-columns: TableColumn[] = [
-  { field: 'select', header: '', type: 'checkbox', sortable: false },
-  { field: 'name', header: 'מספר מסלקה ', type: 'string', sortable: true },
-  { field: 'name', header: 'ח.פ יצרן', type: 'string', sortable: false },
-  { field: 'name', header: ' קוד אירוע', type: 'number', sortable: false },
-  { field: 'name', header: ' סטטוס', type: 'number', sortable: false },
-  { field: 'created', header: 'תאריך יצירה ', type: 'date', sortable: true },
-  { field: 'edit', header: ' שם קובץ', type: 'button', buttonAction: 'edit', buttonLabel: 'הצג', buttonClass: 'p-button-info', sortable: false },
-  { field: 'name', header: 'הודעת שגיאה', type: 'string', sortable: false }, 
-  { field: 'id', header: 'קוד שגיאה', type: 'number', sortable: true },
-  { field: 'delete', header: '  קובץ תשובה', type: 'button', buttonAction: 'delete',buttonLabel:'הצג', buttonClass: 'p-button-danger', sortable: false },
+  columns: TableColumn[] = [
+    { field: 'select', header: '', type: 'checkbox', sortable: false },
+    { field: 'name', header: 'מספר מסלקה ', type: 'string', sortable: true },
+    { field: 'name', header: 'ח.פ יצרן', type: 'string', sortable: false },
+    { field: 'name', header: ' קוד אירוע', type: 'number', sortable: false },
+    { field: 'name', header: ' סטטוס', type: 'number', sortable: false },
+    { field: 'created', header: 'תאריך יצירה ', type: 'date', sortable: true },
+    { field: 'edit', header: ' שם קובץ', type: 'button', buttonAction: 'edit', buttonLabel: 'הצג', buttonClass: 'p-button-info', sortable: false },
+    { field: 'name', header: 'הודעת שגיאה', type: 'string', sortable: false }, 
+    { field: 'id', header: 'קוד שגיאה', type: 'number', sortable: true },
+    { field: 'delete', header: '  קובץ תשובה', type: 'button', buttonAction: 'delete',buttonLabel:'הצג', buttonClass: 'p-button-danger', sortable: false },
+  ];
 
-
-
-
-
-
-];
-
-
-  data = [
+  // Full dataset
+  fullData = [
     { id: 1, name: ' בדיקה מסויימת בעברית כתב ארוך', created: new Date(2024, 5, 12) },
     { id: 2 , name: ' בדיקה מסויימת בעברית כתב ארוך', created: new Date(2024, 6, 5) },
     { id: 3, name: ' אי', created: new Date(2024, 7, 20) },
@@ -43,29 +37,27 @@ columns: TableColumn[] = [
     { id: 8, name: 'מספר מסלקה כלשהו', created: new Date(2024, 6, 5) },
     { id: 9, name: 'בדיקה נוספת', created: new Date(2024, 7, 20) },  
     { id: 10, name: 'עבכרית', created: new Date(2024, 5, 12) },
+    { id: 11, name: 'קובץ 11', created: new Date(2024, 5, 12) },
     { id: 12, name: 'ספרדית', created: new Date(2024, 6, 5) },
     { id: 13, name: 'תרגום ', created: new Date(2024, 7, 20) },
-       { id: 12, name: 'ספרדית', created: new Date(2024, 6, 5) },
-    { id: 13, name: 'תרגום ', created: new Date(2024, 7, 20) },
-       { id: 12, name: 'ספרדית', created: new Date(2024, 6, 5) },
-    { id: 13, name: 'תרגום ', created: new Date(2024, 7, 20) },
-       { id: 12, name: 'ספרדית', created: new Date(2024, 6, 5) },
-    { id: 13, name: 'תרגום ', created: new Date(2024, 7, 20) },
-       { id: 12, name: 'ספרדית', created: new Date(2024, 6, 5) },
-    { id: 13, name: 'תרגום ', created: new Date(2024, 7, 20) },   { id: 12, name: 'ספרדית', created: new Date(2024, 6, 5) },
-    { id: 13, name: 'תרגום ', created: new Date(2024, 7, 20) },
-       { id: 12, name: 'ספרדית', created: new Date(2024, 6, 5) },
-    { id: 13, name: 'תרגום ', created: new Date(2024, 7, 20) },   { id: 12, name: 'ספרדית', created: new Date(2024, 6, 5) },
-    { id: 13, name: 'תרגום ', created: new Date(2024, 7, 20) },
-       { id: 12, name: 'ספרדית', created: new Date(2024, 6, 5) },
-    { id: 13, name: 'תרגום ', created: new Date(2024, 7, 20) },
-       { id: 12, name: 'ספרדית', created: new Date(2024, 6, 5) },
-    { id: 13, name: 'תרגום ', created: new Date(2024, 7, 20) },
-       { id: 12, name: 'ספרדית', created: new Date(2024, 6, 5) },
-    { id: 13, name: 'תרגום ', created: new Date(2024, 7, 20) },   { id: 12, name: 'ספרדית', created: new Date(2024, 6, 5) },
-    { id: 13, name: 'תרגום ', created: new Date(2024, 7, 20) },
-
+    { id: 14, name: 'קובץ 14', created: new Date(2024, 5, 12) },
+    { id: 15, name: 'קובץ 15', created: new Date(2024, 6, 5) },
+    { id: 16, name: 'קובץ 16', created: new Date(2024, 7, 20) },
+    { id: 17, name: 'קובץ 17', created: new Date(2024, 5, 12) },
+    { id: 18, name: 'קובץ 18', created: new Date(2024, 6, 5) },
+    { id: 19, name: 'קובץ 19', created: new Date(2024, 7, 20) },
+    { id: 20, name: 'קובץ 20', created: new Date(2024, 5, 12) },
+    { id: 21, name: 'קובץ 21', created: new Date(2024, 6, 5) },
+    { id: 22, name: 'קובץ 22', created: new Date(2024, 7, 20) },
+    { id: 23, name: 'קובץ 23', created: new Date(2024, 5, 12) },
+    { id: 24, name: 'קובץ 24', created: new Date(2024, 6, 5) },
+    { id: 25, name: 'קובץ 25', created: new Date(2024, 7, 20) },
+    // add more if you want to test multiple pages
   ];
+
+  data: any[] = [];
+  pageSize: number = 20; // Number of items per page
+
 
   expandedColumns: TableColumn[] = [
     { field: 'email', header: 'Email', type: 'string' },
@@ -73,6 +65,11 @@ columns: TableColumn[] = [
   ];
 
   expandedData: { [key: string]: any[] } = {};
+
+
+  ngAfterViewInit() {
+    this.loadPage(0); 
+  }
 
   handleTableAction(event: { type: string | undefined; row: any }) {
     console.log(`Action: ${event.type}`, event.row);
@@ -84,26 +81,29 @@ columns: TableColumn[] = [
     }
   }
 
-  onLoad(numberPage:number) {
-    console.log('Load next page:', numberPage);
-    //this.searchOuery.pageNUmber= numberPage;
-    //this.searchEvent();
-    // Simulate loading data
-    const newData = this.getMockServerData(numberPage);
-    this.dataTable.appendData(newData);
-  }
+loadPage(pageNumber: number) {
+  console.log(`Loading page- parent: ${pageNumber}`);
+  const startIndex = pageNumber * this.pageSize;
+  const endIndex = startIndex + this.pageSize;
+  const newData = this.fullData.slice(startIndex, endIndex);
+  console.log(`Loading data from index ${startIndex} to ${endIndex}`);
+  console.log('New data:\- parent', newData);
+
+  if (newData.length === 0) return;
+
+  setTimeout(() => {
+    this.dataTable.appendData(newData); // safe: appendData handles loadingMore
+  }, 1000);
+}
 
   loadExpandedRowData(row: any) {
-  
     setTimeout(() => {
-
       const mockData = this.getMockServerData(row.id);    
       this.dataTable.setExpandedData(row.id, mockData);
-
+      this.dataTable.expandedLoading[row.id] = false;
     }, 1000);
   }
 
-  // Mock server data - replace this with actual HTTP service call
   private getMockServerData(rowId: number): any[] {
     const serverData = {
       1: [
@@ -123,23 +123,9 @@ columns: TableColumn[] = [
     return serverData[rowId as keyof typeof serverData] || [];
   }
 
-  // For real server implementation, replace getMockServerData with:
-  /*
-  private fetchFromServer(rowId: number): Observable<any[]> {
-    return this.httpClient.get<any[]>(`/api/expanded-data/${rowId}`);
-  }
-  
-  loadExpandedRowData(row: any) {
-    this.fetchFromServer(row.id).subscribe({
-      next: (data) => {
-        this.expandedData[row.id] = data;
-        this.dataTable.setExpandedData(row.id, data);
-      },
-      error: (error) => {
-        console.error('Error loading expanded data:', error);
-        this.dataTable.setLoadingError(row.id);
-      }
-    });
-  }
-  */
+
+
+
+
+
 }

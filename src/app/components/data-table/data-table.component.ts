@@ -25,13 +25,15 @@ export class DataTableComponent {
 
   @Output() loadExpandedData = new EventEmitter<any>();
   @Output() ButtonClick = new EventEmitter<{ action: string | undefined, row: any }>();
+  @Output() selectionChange = new EventEmitter<any[]>();
   @Output() loadNext = new EventEmitter< number>();
 
   constructor(private cd: ChangeDetectorRef) {}
 
 
 
-
+  isAllselected: boolean = false;
+  isAnyselected: boolean = false;
   selectedItems: any[] = [];
   expandedRows: any = {};
   expandedLoading: { [key: number]: boolean } = {};
@@ -74,12 +76,39 @@ export class DataTableComponent {
     this.expandedData[rowId] = newData;
   }
 
-  toggleAllSelection() {
-    this.selectedItems = this.isAllSelected() ? [] : [...this.data];
+  toggleEvent() {
+  console.log('selection', this.selectedItems);
+  //this.checkIsAllSelected();
+  //this.checkIsAnySelected();
+  this.selectionChange.emit(this.selectedItems);
+}
+
+toggleAllSelection() {
+  console.log(this.checkIsAllSelected());
+  if (this.isAllselected) {
+    
+    this.selectedItems = [];
+  } else {
+    this.selectedItems = [...this.data];
+  }
+  console.log('Toggled selection:', this.selectedItems);
+  this.cd.detectChanges();
+  this.selectionChange.emit(this.selectedItems);
+}
+
+get headerCheckboxState() {
+  if (this.selectedItems.length === 0) return false;        // None selected
+  if (this.selectedItems.length === this.data.length) return true;  // All selected
+  return null;  // Some selected → indeterminate
+}
+
+  checkIsAllSelected() {
+    console.log('Checking if all selected:', this.selectedItems.length, this.data.length);
+     return  this.isAllselected= this.selectedItems.length === this.data.length && this.data.length > 0;
   }
 
-  isAllSelected(): boolean {
-    return this.data.length > 0 && this.selectedItems.length === this.data.length;
+  checkIsAnySelected() {
+    this.isAnyselected = this.selectedItems.length > 0;
   }
 
   onButtonClick(action: string | undefined, item: any) {

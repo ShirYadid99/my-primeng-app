@@ -35,7 +35,7 @@
             <!-- Checkbox header -->
             <p-checkbox *ngSwitchCase="'checkbox'"
                         [binary]="true"
-                        [ngModel]="isAllSelected()"
+                        [ngModel]="headerCheckboxState"
                         (onChange)="toggleAllSelection()"
                         [ngStyle]="{'width': '30px', 'height': '30px'}"
                         >
@@ -97,7 +97,8 @@
             <p-checkbox *ngSwitchCase="'checkbox'"
                         [(ngModel)]="selectedItems"
                         [binary]="false"
-                        [value]="item">
+                        [value]="item"
+                        (onChange)="toggleEvent()">
             </p-checkbox>
 
             <!-- Date -->

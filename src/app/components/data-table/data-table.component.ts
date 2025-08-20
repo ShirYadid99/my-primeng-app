@@ -105,7 +105,7 @@ export class DataTableComponent {
     const bufferEnd = event.first + event.rows;
 
     // Only load if scrolling down and we haven’t loaded all data
-    if (!this.loadingMore&&!this.allLoaded && event.first > this.lastFirst && this.loadedRows <100000) {
+    if (!this.loadingMore&&!this.allLoaded && event.first > this.lastFirst && this.loadedRows <100000 &&  bufferEnd >= this.loadedRows - 1) {
       const nextPage = Math.floor(this.loadedRows / this.pageSize);
       this.loadingMore = true;
       this.loadNext.emit(nextPage);

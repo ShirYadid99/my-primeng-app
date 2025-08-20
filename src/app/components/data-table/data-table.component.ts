@@ -5,7 +5,7 @@ import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CalendarModule } from 'primeng/calendar';
-import { TableColumn } from '../../models/table-col';
+import { ColumnDefinition } from '../../models/table-col';
 import { TooltipModule } from 'primeng/tooltip';
 import { SkeletonModule } from 'primeng/skeleton';
 import e from 'express';
@@ -17,14 +17,14 @@ import e from 'express';
   templateUrl: './data-table.component.html',
 })
 export class DataTableComponent {
-  @Input() columns: TableColumn[] = [];
+  @Input() ColumnDefinition: ColumnDefinition[] = [];
   @Input() data: any[] = [];
 
-  @Input() expandedColumns: TableColumn[] = [];
+  @Input() expandedColumns: ColumnDefinition[] = [];
   @Input() expandedData: { [key: string]: any[] } = {};
 
   @Output() loadExpandedData = new EventEmitter<any>();
-  @Output() action = new EventEmitter<{ type: string | undefined, row: any }>();
+  @Output() ButtonClick = new EventEmitter<{ action: string | undefined, row: any }>();
   @Output() loadNext = new EventEmitter< number>();
 
   constructor(private cd: ChangeDetectorRef) {}
@@ -36,7 +36,7 @@ export class DataTableComponent {
   expandedRows: any = {};
   expandedLoading: { [key: number]: boolean } = {};
 
-  loadingMore: boolean = false;
+  loadingMore: boolean = true;
   currentPage: number = 0;
   allLoaded: boolean = false;
   lastFirst = 0; // keeps track of the previous scroll position
@@ -57,6 +57,7 @@ export class DataTableComponent {
       this.data = newData;
     } else {
       newData.forEach(item => this.data.push(item));
+
     }
 
     this.loadedRows = this.data.length;
@@ -82,7 +83,7 @@ export class DataTableComponent {
   }
 
   onButtonClick(action: string | undefined, item: any) {
-    this.action.emit({ type: action, row: item });
+    this.ButtonClick.emit({ action: action, row: item });
   }
 
   onRowToggle(row: any) {
@@ -112,6 +113,12 @@ export class DataTableComponent {
 
     this.lastFirst = event.first;
   }
+
+
+  
+
+
+
 
 
 

@@ -14,15 +14,18 @@
            [tableStyleClass]="'p-datatable-striped'"
            [tableStyle]="{ 'table-layout': 'fixed', 'width': '100%' }"
            sortMode="multiple"
-
-           [virtualScroll]="true" [virtualScrollItemSize]="60" [lazy]="true" (onLazyLoad)="onScroll($event)" [totalRecords]="10000">
+           [virtualScroll]="true" 
+           [virtualScrollItemSize]="60" 
+           [lazy]="true" 
+           (onLazyLoad)="onScroll($event)"
+           [totalRecords]="10000">
            
 
     <!-- Header -->
     <ng-template pTemplate="header">
       <tr>
         <th  [ngStyle]=" {'width': '60px' }"></th>
-        <th *ngFor="let col of columns"
+        <th *ngFor="let col of ColumnDefinition"
             [pSortableColumn]="col.sortable ? col.field : undefined"
             [ngStyle]="{'text-align': 'center','fontWeight': 'bold', 'fontSize': '1.2rem','width': col.type === 'checkbox' ? '50px' : ''}">
 
@@ -73,6 +76,7 @@
 
     <!-- Body -->
     <ng-template pTemplate="body" let-item> 
+
       <tr>
         <!-- Expand button -->
         <td [ngStyle]=" {'width': '60px', 'height': '50px' }">
@@ -86,7 +90,7 @@
         </td>
 
         <!-- Dynamic body cells -->
-        <td *ngFor="let col of columns" [ngStyle]="{'text-align': 'center'}">
+        <td *ngFor="let col of ColumnDefinition" [ngStyle]="{'text-align': 'center'}">
           <ng-container [ngSwitch]="col.type">
 
             <!-- Checkbox -->
@@ -105,7 +109,7 @@
             <!-- Button -->
             <button *ngSwitchCase="'button'"
                     pButton type="button"
-                    [label]="col.buttonLabel || col.header"
+                    [label]="col.buttonText || col.header"
                     [class]="col.buttonClass"
                     (click)="onButtonClick(col.buttonAction, item)">
             </button>
@@ -123,7 +127,7 @@
 
       <!-- Expanded Row -->
       <tr *ngIf="expandedRows[item.id]">
-        <td [attr.colspan]="columns.length + 1">
+        <td [attr.colspan]="ColumnDefinition.length + 1">
           <div style="text-align: right"> מידע עבור מס רשומה : {{item.id}}</div>
           <div class="p-4 bg-gray-50">
 

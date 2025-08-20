@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { DataTableComponent } from './components/data-table/data-table.component';
 import { CommonModule } from '@angular/common';
-import { TableColumn } from './models/table-col';
+import { ColumnDefinition } from './models/table-col';
 
 @Component({
   selector: 'app-root',
@@ -12,17 +12,17 @@ import { TableColumn } from './models/table-col';
 export class AppComponent {
   @ViewChild(DataTableComponent) dataTable!: DataTableComponent;
 
-  columns: TableColumn[] = [
+  gridcolumnDefinition: ColumnDefinition[] = [
     { field: 'select', header: '', type: 'checkbox', sortable: false },
     { field: 'name', header: 'מספר מסלקה ', type: 'string', sortable: true },
     { field: 'name', header: 'ח.פ יצרן', type: 'string', sortable: false },
     { field: 'name', header: ' קוד אירוע', type: 'number', sortable: false },
     { field: 'name', header: ' סטטוס', type: 'number', sortable: false },
     { field: 'created', header: 'תאריך יצירה ', type: 'date', sortable: true },
-    { field: 'edit', header: ' שם קובץ', type: 'button', buttonAction: 'edit', buttonLabel: 'הצג', buttonClass: 'p-button-info', sortable: false },
+    { field: 'edit', header: ' שם קובץ', type: 'button', buttonAction: 'edit', buttonText: 'הצג',showIf: ()=>true, buttonClass: 'p-button-info', sortable: false },
     { field: 'name', header: 'הודעת שגיאה', type: 'string', sortable: false }, 
     { field: 'id', header: 'קוד שגיאה', type: 'number', sortable: true },
-    { field: 'delete', header: '  קובץ תשובה', type: 'button', buttonAction: 'delete',buttonLabel:'הצג', buttonClass: 'p-button-danger', sortable: false },
+    { field: 'delete', header: '  קובץ תשובה', type: 'button', buttonAction: 'delete',buttonText:'הצג',showIf: ()=>false, buttonClass: 'p-button-danger', sortable: false },
   ];
 
   // Full dataset
@@ -86,7 +86,7 @@ export class AppComponent {
   pageSize: number = 20; // Number of items per page
 
 
-  expandedColumns: TableColumn[] = [
+  expandedColumns: ColumnDefinition[] = [
     { field: 'email', header: 'Email', type: 'string' },
     { field: 'address', header: 'Address', type: 'string' },
   ];
@@ -98,12 +98,12 @@ export class AppComponent {
     this.loadPage(0); 
   }
 
-  handleTableAction(event: { type: string | undefined; row: any }) {
-    console.log(`Action: ${event.type}`, event.row);
-    if (event.type === 'edit') {
+  handleButtonAction(event: { action: string | undefined; row: any }) {
+    console.log(`Action: ${event.action}`, event.row);
+    if (event.action === 'edit') {
       alert(`Editing: ${event.row.name}`);
     }
-    if (event.type === 'delete') {
+    if (event.action === 'delete') {
       alert(`Deleting: ${event.row.name}`);
     }
   }

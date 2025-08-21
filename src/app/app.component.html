@@ -5,6 +5,7 @@
   [data]="data"
   [expandedColumns]="expandedColumns"
   (ButtonClick)="handleButtonAction($event)"
+  (selectionChange)="selectedItemChange($event)"
   (loadExpandedData)="loadExpandedRowData($event)"
   (loadNext)="loadPage($event)">
 </app-data-table>

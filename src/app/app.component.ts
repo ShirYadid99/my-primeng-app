@@ -84,6 +84,7 @@ export class AppComponent {
 
   data: any[] = [];
   pageSize: number = 20; // Number of items per page
+  selectedItems :any[]=[];
 
 
   expandedColumns: ColumnDefinition[] = [
@@ -132,6 +133,11 @@ loadPage(pageNumber: number) {
     }, 1000);
   }
 
+  selectedItemChange(event:any[]){
+    this.selectedItems= event;
+    console.log(this.selectedItems, 'the selected item in the parent')
+  }
+
   private getMockServerData(rowId: number): any[] {
     const serverData = {
       1: [
@@ -150,6 +156,8 @@ loadPage(pageNumber: number) {
 
     return serverData[rowId as keyof typeof serverData] || [];
   }
+
+  
 
 
 
